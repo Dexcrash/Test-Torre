@@ -89,32 +89,7 @@
               {{ item.name }}
             </v-btn>
           </v-btn-toggle>
-          <v-slider
-            v-for="(item, index) in personalityTraits"
-            v-bind:key="index"
-            v-model="teamPersonalityTraits[index]"
-            step="0.5"
-            thumb-label
-            :max="5"
-            :min="1"
-            ticks
-          >
-            <template v-slot:prepend>
-              <div class="text--secondary" style="width: 6rem">
-                <span class="d-inline-block" style="max-width: 100px">
-                  {{ item.pre }}
-                </span>
-              </div>
-            </template>
-
-            <template v-slot:append>
-              <div class="text--secondary" style="width: 6rem">
-                <span class="d-inline-block" style="max-width: 100px">
-                  {{ item.post }}
-                </span>
-              </div>
-            </template>
-          </v-slider>
+          <SlidersGroup :setPersonalityTraits='setPersonalityTraits' :personalityTraits='personalityTraits' :teamPersonalityTraits='teamPersonalityTraits'></SlidersGroup>
         </v-col>
         <v-col cols="12" md="6">
           <h3>Organization Culture</h3>
@@ -146,9 +121,13 @@
 </template>
 
 <script>
+import SlidersGroup from '../components/SlidersGroup'
+
 export default {
   name: "TeamForm",
-
+  components: {
+    SlidersGroup
+  },
   data: () => ({
     valid: true,
     name: "",
@@ -190,9 +169,9 @@ export default {
     ],
     typeOfPersonalityTraits: "0",
     teamPersonalities: [
-      { name: "Balanced", traits: [3, 3, 3, 3, 3, 3] },
+      { name: "Balanced", traits: [3.5, 3.5, 3.5, 3.5, 3.5, 3.5] },
       { name: "Startup!", traits: [4, 4.5, 3.5, 3, 4, 3.5] },
-      { name: "Conservative", traits: [3, 3, 4.5, 4, 4.5, 3.5] },
+      { name: "Conservative", traits: [3, 3, 4.5, 4, 4.5, 3] },
     ],
     teamPersonalityTraits: [3, 3, 3, 3, 3, 3],
     proCultureTraits: [
@@ -258,6 +237,9 @@ export default {
     setPersonalityTraits() {      
       let index = this.typeOfPersonalityTraits - 1;
       this.teamPersonalityTraits = this.teamPersonalities[index].traits;
+    },
+    setPersonalized() {      
+      this.typeOfPersonalityTraits = 0;      
     },
   },
 };

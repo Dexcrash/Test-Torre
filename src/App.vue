@@ -45,11 +45,12 @@
 
 <script>
 import TeamForm from './pages/TeamForm';
-
+// import TeamResults from './pages/TeamResults';
 export default {
   name: 'App',
   components: {
     TeamForm,
+//    TeamResults,
   },
 
   data: () => ({
