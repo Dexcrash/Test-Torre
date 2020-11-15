@@ -9,7 +9,9 @@
       thumb-label
       :max="5"
       :min="1"
-      ticks
+      
+      color="#cddc39"
+      ticks="always"
     >
       <template v-slot:prepend>
         <div class="text--secondary" style="width: 6rem">
@@ -32,7 +34,7 @@
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: "SlidersGroup",
   props:['setPersonalized', 'personalityTraits', 'teamPersonalityTraits'],
   data: () => ({
   }),
