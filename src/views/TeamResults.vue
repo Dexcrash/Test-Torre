@@ -5,7 +5,12 @@
         <h2>Team Information</h2>
         <hr />
         <br />
-        <h4>Nombre del equipo</h4>
+        <h4>{{$store.state.teamName}}</h4>
+        <br />
+
+        <h4>Team Description:</h4>
+        <p>{{$store.state.teamDescription}}</p>
+        <hr />
         <br />
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in
@@ -16,7 +21,7 @@
         </p>
       </v-col>
       <v-col cols="12" md="6">
-        <h3>Team Selection</h3>
+        <h2>Team Selection</h2>
 
         <carousel-3d
           v-for="(profileList, i) in listsOfProfiles"
@@ -35,9 +40,24 @@
           </slide>
         </carousel-3d>
       </v-col>
-      <v-col cols="12" md="3">
-        <h3>Team Performance</h3>
-        <SlidersGroup :personalityTraits='personalityTraits' :teamPersonalityTraits='teamPersonalityTraits'></SlidersGroup>
+      <v-col cols="12" md="3">        
+
+        <h2>Team Personality</h2>
+        <hr />
+        <br />
+        <span>Personality Score: </span>
+        <br />
+        <span>Diversity Score: </span>
+        <br />
+        <br />
+        <h4>Team´s Traits: </h4>
+        
+        <SlidersGroup :personalityTraits='personalityTraits' :teamPersonalityTraits='teamPersonalityTraits'></SlidersGroup>        
+
+        <h2>Team Professional Culture</h2>
+        <hr />
+        <br />
+        
       </v-col>
     </v-row>
   </v-container>

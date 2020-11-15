@@ -7,16 +7,27 @@
     >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Name"
+          alt="Torre Name"
           class="shrink mt-1 hidden-sm-and-down"
           contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          min-width="130"
+          src="./assets/logo.png"
           width="100"
         />
       </div>
 
       <v-spacer></v-spacer>
+
+      <div class="d-flex align-center">
+        <v-img
+          alt="Torre Menu"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="600"
+          src="./assets/menu.png"
+          width="100"
+        />
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -28,9 +39,6 @@
 
 export default {
   name: 'App',
-  components: {
-  },
-
   data: () => ({
     //
   }),

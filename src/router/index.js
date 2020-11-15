@@ -13,7 +13,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/form/',
+    path: '/',
     name: 'TeamForm',
     component: () => import(/* webpackChunkName: "about" */ '../views/TeamForm.vue')
   },

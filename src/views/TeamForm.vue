@@ -1,10 +1,10 @@
 <template>
   <v-container primary style="width: 60%; margin-right: 20%; padding:0">
     <br/>
-    <h1 class="ma-5">Search & Team Builder</h1>
+    <h1 class="ma-5">Team Builder</h1>
     <v-form class="ma-5" ref="basicForm">
       <v-text-field
-        v-model="name"
+        v-model="teamName"
         :counter="50"
         :rules="nameRules"
         required
@@ -15,7 +15,7 @@
       </v-text-field>
 
       <v-text-field 
-        v-model="description"
+        v-model="teamDescription"
         :rules="descriptionRules"
         required
         label="Description"
@@ -33,6 +33,7 @@
         hint="Select how many types of profiles do you need in your team"
         persistent-hint
         color="#cddc39"
+        item-color="#cddc39"
       ></v-select>
 
       <v-row justify="center">
@@ -128,10 +129,11 @@
             v-model="teamProCultureTraits"
             :items="proCultureTraits"
             :menu-props="{ height: '400' }"
+            :rules="cultureRules"
             label="Select skills for this profile"
             multiple
             chips
-            hint="Select many skills as you consider necessary"
+            hint="Select culture traits that align with your organization"
             persistent-hint
             color="#cddc39"
             item-color="#cddc39"
@@ -156,6 +158,7 @@
 
 <script>
 import SlidersGroup from "../components/SlidersGroup";
+import router from '../router'
 // import axios from 'axios'
 
 export default {
@@ -164,22 +167,31 @@ export default {
     SlidersGroup,
   },
   data: () => ({
+    //Team's information
+    teamName: "",
+    teamDescription: "",
+    profilesSelected: 0,
+    typeOfPersonalityTraits: "0",
+    teamPersonalityTraits: [3, 3, 3, 3, 3, 3],    
+    teamProCultureTraits: [],    
+    //validators
     valid: true,
-    name: "",
+    basicFormCompleted: false,
+    //Rules for inputs
     nameRules: [
       (v) => !!v || "Name is required",
       (v) => (v && v.length <= 25) || "Name must be less than 25 characters",
     ],
-    description: "",
     descriptionRules:[
       (v) => !!v || "Description is required",
     ],
-    basicFormCompleted: false,
-    profilesTypes: [ "2", "3"],
     profilesRules: [(v) => v >= 2 || "Select at less 2"],
-    profilesSelected: 0,
-    skills: [],
     skillsRules: [(v) => v.length >= 2 || "Select at less 2"],
+    cultureRules: [(v) => v.length <= 5 || "Select only a top 5 of culture traits"],
+    //Data from API & static
+    skills: [],
+    proCultureTraits: [],
+    profilesTypes: [ "2", "3"],
     personalityTraits: [
       { pre: "Solitary/\nreserved", post: "Outgoing/\nenergetic" },
       { pre: "Consistent/\ncautious", post: "Inventive/\ncurious" },
@@ -188,16 +200,12 @@ export default {
       { pre: "Sly/\navaricious", post: "Sincere/\nmodest" },
       { pre: "Secure/\nconfident", post: "Sensitive/\nmodest" },
     ],
-    typeOfPersonalityTraits: "0",
     teamPersonalities: [
       { name: "Personalized", traits: [3.5, 3.5, 3.5, 3.5, 3.5, 3.5] },
       { name: "Balanced", traits: [3.5, 3.5, 3.5, 3.5, 3.5, 3.5] },
       { name: "Startup!", traits: [4, 4.5, 3.5, 3, 4, 3.5] },
       { name: "Conservative", traits: [3, 3, 4.5, 4, 4.5, 3] },
-    ],
-    teamPersonalityTraits: [3, 3, 3, 3, 3, 3],
-    proCultureTraits: [],
-    teamProCultureTraits: [],
+    ]
   }),
   created() {
     this.getSkills();
@@ -213,6 +221,7 @@ export default {
           skills: [],
         });
       }
+      console.log(this.profilesSelected)
       return profiles;
     },
     profilesCompleted: function () {
@@ -226,21 +235,14 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log("Entro");
-      this.profiles.forEach((item) => {
-        console.log(item.name);
-        console.log(item.description);
-      });
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
     validate() {
-      this.basicFormCompleted = this.$refs.basicForm.validate();
+      if(this.basicFormCompleted && this.$refs.basicForm.validate()){
+        this.sendInfo();
+        console.log("PASO")
+        router.push('results')
+      }else {
+        this.basicFormCompleted = this.$refs.basicForm.validate();
+      }      
     },
     setPersonalityTraits() {
       let index = this.typeOfPersonalityTraits;
@@ -248,6 +250,17 @@ export default {
     },
     setPersonalized() {
       this.typeOfPersonalityTraits = 0;
+    },
+    sendInfo() {
+      this.$store.dispatch('updateTeamInfo', {
+      teamName: this.teamName,
+      teamDescription :this.teamDescription,
+      profilesSelected: this.profilesSelected,
+      typeOfPersonalityTraits: this.typeOfPersonalityTraits,
+      teamPersonalityTraits: this.teamPersonalityTraits,
+      teamProCultureTraits: this.teamProCultureTraits,
+      profiles: this.profiles
+      })
     },
     async getSkills() {
       // let res = await axios.get("https://search.torre.co/people/_search/?offset=0&size=2&aggregate=true")...
