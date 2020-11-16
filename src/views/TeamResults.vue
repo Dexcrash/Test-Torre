@@ -24,15 +24,16 @@
         <h2>Team Selection</h2>
 
         <carousel-3d
+          @before-slide-change="onBeforeSlideChange"
           v-for="(profileList, i) in listsOfProfiles"
           :key="i"
           :controls-visible="true"
           :clickable="false"
           :loop="false"
         >
-          <slide v-for="(profile, i) in profileList.profiles" v-bind:key="i" :index="i">
+          <slide v-for="(profile, i) in profileList.people" v-bind:key="i" :index="i">
             <figure>
-              <img src="https://placehold.it/360x270" />
+              <img :src= profile.picture>
               <figcaption>
                 {{profile.name}}
               </figcaption>
@@ -45,9 +46,9 @@
         <h2>Team Personality</h2>
         <hr />
         <br />
-        <span>Personality Score: </span>
+        <span>Personality Score: {{personalityScore}}/10</span>
         <br />
-        <span>Diversity Score: </span>
+        <span>Diversity Score: {{diversityScore}}/10</span>
         <br />
         <br />
         <h4>Team´s Traits: </h4>
@@ -75,39 +76,6 @@ export default {
     SlidersGroup
   },
   data: () => ({
-    numberOfProfiles: 3,
-    listsOfProfiles: [
-      {
-        name: "Nombre1",
-        profiles: [
-          { name: "Pepito1", description: "" },
-          { name: "Pepito2", description: "" },
-          { name: "Pepito3", description: "" },
-          { name: "Pepito4", description: "" },
-          { name: "Pepito5", description: "" },
-        ],
-      },
-      {
-        name: "Nombre2",
-        profiles: [
-          { name: "Carlos1", description: "" },
-          { name: "Carlos2", description: "" },
-          { name: "Carlos3", description: "" },
-          { name: "Carlos4", description: "" },
-          { name: "Carlos5", description: "" },
-        ],
-      },
-      {
-        name: "Nombre3",
-        profiles: [
-          { name: "Juan1", description: "" },
-          { name: "Juan2", description: "" },
-          { name: "Juan3", description: "" },
-          { name: "Juan4", description: "" },
-          { name: "Juan5", description: "" },
-        ],
-      },
-    ],
     teamPersonalityTraits: [3, 3, 3, 3, 3, 3],
     personalityTraits: [
       { pre: "Solitary/\nreserved", post: "Outgoing/\nenergetic" },
@@ -117,7 +85,33 @@ export default {
       { pre: "Sly/\navaricious", post: "Sincere/\nmodest" },
       { pre: "Secure/\nconfident", post: "Sensitive/\nmodest" },
     ],
+    personalityScore: 10,
+    diversityScore: 10
   }),
+  created() {
+  },
+  computed: {
+    //skills for profiles
+    listsOfProfiles (){
+      return this.$store.getters.getProfiles
+    },
+  },
+  methods:{
+    
+    onBeforeSlideChange() {
+      // here define the method to calculated results of teams
+      this.personalityScore = Math.floor(Math.random() * (10));
+      this.diversityScore = Math.floor(Math.random() * (10));
+      this.teamPersonalityTraits= [
+        Math.floor(Math.random() * (5)),
+        Math.floor(Math.random() * (5)),
+        Math.floor(Math.random() * (5)),
+        Math.floor(Math.random() * (5)),
+        Math.floor(Math.random() * (5)),
+        Math.floor(Math.random() * (5))
+      ]
+    }
+  }
 };
 </script>
 

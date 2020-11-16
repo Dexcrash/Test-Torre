@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import myApi from '../api/myProxyTorre'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,8 @@ export default new Vuex.Store({
     teamPersonalityTraits: [3, 3, 3, 3, 3, 3],    
     teamProCultureTraits: [],
     profiles : [],
+    skills: [],
+    listsOfProfiles:[]
   },
   mutations: {
     teamName (state, name) {
@@ -36,6 +39,15 @@ export default new Vuex.Store({
     profiles (state, profiles){
       state.profiles = profiles
     },
+    skills (state, skills){
+      state.skills = skills
+    },
+    proCulture (state, proCulture){
+      state.proCulture = proCulture
+    },
+    listsOfProfiles (state, listsOfProfiles){
+      state.listsOfProfiles = listsOfProfiles
+    },
   },
   actions: {
     updateTeamInfo (context, infoObject) {
@@ -45,7 +57,19 @@ export default new Vuex.Store({
       context.commit('typeOfPersonalityTraits', infoObject.typeOfPersonalityTraits)
       context.commit('teamPersonalityTraits', infoObject.teamPersonalityTraits)
       context.commit('teamProCultureTraits', infoObject.teamProCultureTraits)
-      context.commit('profiles', infoObject.profiles)
+      context.commit('profiles', infoObject.profiles)      
+    },
+    setSkills: (state) => {
+      myApi.get('/skills').then(response => state.commit('skills', JSON.parse(JSON.stringify(response.data))))
+    },
+    setProCulture: (state) => {
+      myApi.get('/professionalCulture').then(response => state.commit('proCulture', JSON.parse(JSON.stringify(response.data))))
+    },
+    setListsOfProfiles: (state, profiles) => {
+      myApi.post('/userProfiles', profiles).then(response => state.commit('listsOfProfiles', JSON.parse(JSON.stringify(response.data))))
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   },
   getters: {
@@ -59,25 +83,14 @@ export default new Vuex.Store({
         teamProCultureTraits: state.teamProCultureTraits,
       }
     },
-    profiles(state) {
-      let profiles = [];
-      for (let i = 0;i<state.profilesSelected;i++){
-        profiles.push({
-          name: "",
-          description: "",
-          skills: [],
-        });
-      }
-      return profiles;
+    getSkills(state) {
+      return state.skills
     },
-    profilesCompleted: function () {
-      let res = true;
-      this.profiles.forEach((item) => {
-        if (!item.name && item.name == "") res = false;
-        if (!item.description && item.description == "") res = false;
-        if (!item.skills && item.skills.length > 2) res = false;
-      });
-      return res;
+    getProCulture(state) {
+      return state.proCulture
+    },
+    getProfiles(state) {
+      return state.listsOfProfiles
     },
   }
 })

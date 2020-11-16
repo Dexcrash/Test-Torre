@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-slider
-      v-on:click="setPersonalized"
+      :click="setPersonalized"
       v-for="(item, index) in personalityTraits"
       v-bind:key="index"
       v-model="teamPersonalityTraits[index]"
